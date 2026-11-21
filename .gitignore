@@ -1,0 +1,15 @@
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+
+# Local overrides / secrets — never commit these
+.env
+.env.*
+*.key
+*.pem
+credentials.json

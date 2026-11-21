@@ -1,0 +1,44 @@
+{
+  "skill_name": "lenspay-builder",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want creators to be able to set a default price that applies to all their shares when no per-share price is set. Right now the default is only in the .env file (micro_usdc) and creators can't change it without restarting the server. I need:\n\n1. An API endpoint to set/get/delete the default price\n2. The /api/dashboard endpoint to include the current default price and whether it's the env default or custom\n3. When getting price for a share (/api/price/{share_id}), if no custom price exists, fall back to the creator's custom default (not the env default), and only fall back to the env default if no custom default is set\n\nThis is in the lenspay Python backend. The existing code is in src/lenspay/ and I'm working from C:\\Users\\oladips\\Downloads\\Canteen hackhation.",
+      "expected_output": "Updated config, transaction_store, api.py with new default price endpoints and fallback logic",
+      "files": [],
+      "expectations": [
+        "Adds a POST/DELETE /creator/default-price endpoint in api.py",
+        "Updates the dashboard endpoint (/api/dashboard) to include default_price_source ('env' or 'custom') and effective default price",
+        "Updates /api/price/{share_id} to use the custom default price before falling back to env default",
+        "Adds set_default_price(), get_default_price(), delete_default_price() methods to TransactionStore",
+        "The implementation references the existing project files and follows the same patterns"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "The paywall page in the lenspay frontend doesn't handle MetaMask rejection gracefully. When a user clicks 'Pay' and then rejects the transaction in MetaMask, the UI just shows a generic 'Payment failed' error. I want to improve this:\n\n1. Detect when the user rejected the transaction in MetaMask specifically (vs. a network error or other failure)\n2. Show a clear, friendly message like 'Transaction cancelled — you rejected the payment in MetaMask'\n3. Show a 'Try Again' button that lets the user retry without refreshing the page\n4. For other errors, show the actual error message in a human-readable way\n\nThe paywall frontend is a React + TypeScript + Vite app in C:\\Users\\oladips\\Downloads\\Canteen hackhation\\src\\lenspay\\paywall-app. It uses wagmi/viem for wallet connection and USDC transfer.",
+      "expected_output": "Updated React paywall component with MetaMask rejection handling, clear error messages, and retry button",
+      "files": [],
+      "expectations": [
+        "Imports and uses wagmi's UserRejectedRequestError or similar to detect MetaMask rejection",
+        "Shows a specific 'Transaction cancelled' message for user rejection, not a generic error",
+        "Includes a 'Try Again' button that resets the error state and lets the user retry",
+        "Non-rejection errors display the actual error message in human-readable format",
+        "The solution references existing project files and follows the project's code patterns"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "The decode-batch.ts in circle-agent uses a hardcoded 10-second window to match off-chain settlement UUIDs to on-chain batch transaction entries. Sometimes this is too narrow. I want to make it configurable:\n\n1. Add an optional timeWindowSeconds parameter (default 10) to the decodeBatch function\n2. When no match is found within the window, log a warning and return an empty settlements array instead of silently returning nothing\n3. Update the API endpoint /api/decode-batch/:hash to accept an optional ?window= query parameter\n4. Make it easy to call from the CLI with a --window flag\n\nThe code is in C:\\Users\\oladips\\Downloads\\Canteen hackhation\\circle-agent\\decode-batch.ts and server.ts.",
+      "expected_output": "Updated decode-batch.ts with configurable time window, and updated server.ts and buyer.html to support the parameter",
+      "files": [],
+      "expectations": [
+        "decodeBatch() function accepts an optional timeWindowSeconds parameter defaulting to 10",
+        "When no settlement match is found within the window, logs a warning and returns empty settlements",
+        "The /api/decode-batch/:hash endpoint accepts a ?window query parameter and passes it through",
+        "CLI usage supports a --window flag",
+        "Changes follow the existing code patterns (TypeScript, viem, Express)"
+      ]
+    }
+  ]
+}
